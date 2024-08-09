@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.harness:gradle-cache:0.0.2'
+    }
+}
+
 plugins {
     id 'com.gradle.enterprise' version '3.16.2'
     id 'com.gradle.common-custom-user-data-gradle-plugin' version '1.13'
@@ -49,3 +58,19 @@ project(':examples-functional-test-app'    ).projectDir = [settingsDir, 'example
 project(':examples-integration-test-app'   ).projectDir = [settingsDir, 'examples/integration-test-app'] as File
 project(':examples-misc-group'             ).projectDir = [settingsDir, 'examples/misc-functional-test-app/grails-spring-security-group'] as File
 project(':examples-misc-hierarchical-roles').projectDir = [settingsDir, 'examples/misc-functional-test-app/grails-spring-security-hierarchical-roles'] as File
+
+apply plugin: 'io.harness.gradle-cache'
+
+buildCache {
+    local {
+        // Local build cache is dangerous as it might produce inconsistent results
+        // in case developer modifies files while the build is running
+        enabled = false
+    }
+    remote(io.harness.Cache) {
+        accountId = System.getenv('HARNESS_ACCOUNT_ID')
+        token = System.getenv('HARNESS_PAT')
+        push = System.getenv('CI') == "true"
+        endpoint = System.getenv('HARNESS_CACHE_SERVICE_ENDPOINT')
+    }
+}
