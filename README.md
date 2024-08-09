@@ -4,6 +4,7 @@ Grails Spring Security Core Plugin
 ==================================
 
 See [documentation](https://grails-plugins.github.io/grails-spring-security-core/) for further information.
+Testing
 
 ### Branch structure 
 
